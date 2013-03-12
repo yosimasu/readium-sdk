@@ -42,12 +42,24 @@
 #define EPUB3_TARGET_WINDOWS 1
 #endif
 
+#if defined(ANDROID)
+# define UTF_USE_ICU 1
+#else
+# define UTF_USE_ICU 0
+#endif
+
 #if (defined(__i386__) || defined(__x86_64__)) && !defined(__LITTLE_ENDIAN__)
 #define __LITTLE_ENDIAN__ 1
 #endif
 
 #if !defined(__BIG_ENDIAN__) && !defined(__LITTLE_ENDIAN__)
-#error Do not know the endianess of this architecture
+# include <endian.h>
+# if _BYTE_ORDER == _LITTLE_ENDIAN
+#  define __LITTLE_ENDIAN__ 1
+# endif
+# if _BYTE_ORDER == _BIG_ENDIAN
+#  define __BIG_ENDIAN__ 1
+# endif
 #endif
 
 #if !__BIG_ENDIAN__ && !__LITTLE_ENDIAN__
@@ -82,6 +94,23 @@
 # endif
 #else
 # define EPUB3_EXPORT
+#endif
+
+#if __cplusplus
+# include <exception>
+# ifndef _LIBCPP_VERSION
+#  ifndef _LIBCPP_HIDDEN
+#   define _LIBCPP_HIDDEN __attribute__ ((__visibility__("hidden")))
+#  endif
+
+#  ifndef _LIBCPP_VISIBLE
+#   define _LIBCPP_VISIBLE __attribute__ ((__visibility__("default")))
+#  endif
+
+#  ifndef _LIBCPP_INLINE_VISIBILITY
+#   define _LIBCPP_INLINE_VISIBILITY __attribute__ ((__visibility__("hidden"), __always_inline__))
+#  endif
+# endif
 #endif
 
 #endif

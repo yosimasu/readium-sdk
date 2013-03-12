@@ -36,12 +36,12 @@
 EPUB3_XML_BEGIN_NAMESPACE
 
 // generic 'get me a wrapper' template
-template <class _T, typename _N>
-static inline _T * Wrapped(_N * n)
+template <class _Tp, typename _Nm>
+static inline _Tp * Wrapped(_Nm * n)
 {
     if ( n == nullptr ) return nullptr;
-    if ( n->_private != nullptr ) return reinterpret_cast<_T*>(n->_private);
-    return new _T(n);
+    if ( n->_private != nullptr ) return reinterpret_cast<_Tp*>(n->_private);
+    return new _Tp(n);
 }
 
 class exception : public std::exception
